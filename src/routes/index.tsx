@@ -182,7 +182,7 @@ export default component$(() => {
   });
 
   return (
-    <div class="h-screen overflow-hidden touch-none">
+    <div class="h-screen w-screen overflow-hidden touch-action-none overscroll-none">
       {/* Progress indicator */}
       <div class="fixed top-4 left-1/2 -translate-x-1/2 z-50 md:hidden">
         <div class="bg-base-200/80 backdrop-blur-sm rounded-full px-4 py-2">
