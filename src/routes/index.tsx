@@ -4,7 +4,6 @@ import { HeroSection } from "~/components/sections/HeroSection";
 import { AboutSection } from "~/components/sections/AboutSection";
 import { VideoSection } from "~/components/sections/VideoSection";
 import { PhotoSection } from "~/components/sections/PhotoSection";
-import { pushToDataLayer } from "~/constants/gtm";
 // Import other sections...
 
 export default component$(() => {
@@ -181,14 +180,6 @@ export default component$(() => {
       window.removeEventListener('orientationchange', () => {});
     };
   });
-
-  const handleClick = () => {
-    pushToDataLayer({
-      event: 'buttonClick',
-      buttonName: 'viewWork',
-      // Add any other data you want to track
-    });
-  };
 
   return (
     <div class="h-screen w-screen overflow-hidden touch-action-none overscroll-none">
