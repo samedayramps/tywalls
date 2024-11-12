@@ -12,12 +12,19 @@ export default component$(() => {
   const scrollDelta = useSignal(0);
   const isMobileMenuOpen = useSignal(false);
   
-  // Constants for scroll behavior
+  // Increased thresholds for less sensitive scrolling
   const SCROLL_THRESHOLD = {
-    DESKTOP: 100,
-    MOBILE: 50  // Lower threshold for mobile for better responsiveness
+    DESKTOP: 200,    // Increased from 100 to 200
+    MOBILE: 100      // Increased from 50 to 100
   };
-  const TRANSITION_DURATION = 700; // Slightly faster for mobile
+  
+  // Increased transition duration for smoother feel
+  const TRANSITION_DURATION = 1000;  // Increased from 700 to 1000
+  
+  // Added minimum velocity threshold for swipes
+  const VELOCITY_THRESHOLD = 400;    // Minimum velocity (px/sec) for swipe to trigger
+  const SWIPE_THRESHOLD = 0.5;       // Increased from 0.3 to 0.5 seconds
+
   const SECTIONS = ['Home', 'About', 'Projects', 'Contact'];
 
   // Handle scroll events
@@ -25,7 +32,8 @@ export default component$(() => {
   useVisibleTask$(() => {
     let lastTouchY = 0;
     let touchStartTime = 0;
-    const SWIPE_THRESHOLD = 0.3; // seconds
+    let accumulatedDelta = 0;  // Track accumulated scroll delta
+    let lastScrollTime = Date.now();
 
     const getIsMobile = () => window.innerWidth <= 768;
     const threshold = () => getIsMobile() ? SCROLL_THRESHOLD.MOBILE : SCROLL_THRESHOLD.DESKTOP;
@@ -34,9 +42,20 @@ export default component$(() => {
       e.preventDefault();
       if (isScrolling.value || isMobileMenuOpen.value) return;
 
+      const currentTime = Date.now();
+      const timeDelta = currentTime - lastScrollTime;
+      
+      // Reset accumulated delta if too much time has passed
+      if (timeDelta > 200) {  // Reset after 200ms of no scrolling
+        accumulatedDelta = 0;
+      }
+      
+      accumulatedDelta += Math.abs(e.deltaY);
+      lastScrollTime = currentTime;
+
       scrollDelta.value += e.deltaY;
 
-      if (Math.abs(scrollDelta.value) >= threshold()) {
+      if (accumulatedDelta >= threshold()) {
         isScrolling.value = true;
         
         if (scrollDelta.value > 0 && currentSection.value < SECTIONS.length - 1) {
@@ -45,15 +64,17 @@ export default component$(() => {
           currentSection.value--;
         }
 
+        // Reset both deltas
         scrollDelta.value = 0;
+        accumulatedDelta = 0;
 
         setTimeout(() => {
           isScrolling.value = false;
         }, TRANSITION_DURATION);
       } else {
-        // Reset delta after a shorter delay on mobile
+        // Gradually decay the accumulated delta
         setTimeout(() => {
-          scrollDelta.value = 0;
+          accumulatedDelta = Math.max(0, accumulatedDelta - 50);
         }, getIsMobile() ? 100 : 150);
       }
     };
@@ -61,21 +82,25 @@ export default component$(() => {
     const handleTouchStart = (e: TouchEvent) => {
       lastTouchY = e.touches[0].clientY;
       touchStartTime = Date.now();
-      scrollDelta.value = 0; // Reset delta on new touch
+      scrollDelta.value = 0;
+      accumulatedDelta = 0;  // Reset accumulated delta on touch start
     };
 
     const handleTouchMove = (e: TouchEvent) => {
       if (isScrolling.value || isMobileMenuOpen.value) return;
       
       const touchDelta = lastTouchY - e.touches[0].clientY;
-      const timeDelta = (Date.now() - touchStartTime) / 1000; // Convert to seconds
+      const timeDelta = (Date.now() - touchStartTime) / 1000;
 
-      // Add velocity-based scrolling
+      // Accumulate touch movement
+      accumulatedDelta += Math.abs(touchDelta);
+
+      // Check for quick swipes with sufficient velocity
       if (timeDelta > 0) {
         const velocity = Math.abs(touchDelta / timeDelta);
-        const isQuickSwipe = timeDelta < SWIPE_THRESHOLD && velocity > 200;
+        const isQuickSwipe = timeDelta < SWIPE_THRESHOLD && velocity > VELOCITY_THRESHOLD;
 
-        if (isQuickSwipe) {
+        if (isQuickSwipe && accumulatedDelta >= threshold() / 2) {  // Require less movement for quick swipes
           isScrolling.value = true;
           
           if (touchDelta > 0 && currentSection.value < SECTIONS.length - 1) {
@@ -92,18 +117,17 @@ export default component$(() => {
         }
       }
 
-      scrollDelta.value = touchDelta;
-
-      if (Math.abs(scrollDelta.value) >= threshold()) {
+      // Normal touch scrolling
+      if (accumulatedDelta >= threshold()) {
         isScrolling.value = true;
         
-        if (scrollDelta.value > 0 && currentSection.value < SECTIONS.length - 1) {
+        if (touchDelta > 0 && currentSection.value < SECTIONS.length - 1) {
           currentSection.value++;
-        } else if (scrollDelta.value < 0 && currentSection.value > 0) {
+        } else if (touchDelta < 0 && currentSection.value > 0) {
           currentSection.value--;
         }
 
-        scrollDelta.value = 0;
+        accumulatedDelta = 0;
         
         setTimeout(() => {
           isScrolling.value = false;
