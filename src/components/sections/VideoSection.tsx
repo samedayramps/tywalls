@@ -1,5 +1,6 @@
 import { component$, useSignal } from "@builder.io/qwik";
 import { BaseSection } from "./BaseSection";
+import { getCDNVideoUrl, getCDNImageUrl } from "~/constants/cdn";
 
 interface VideoItem {
   id: number;
@@ -14,15 +15,15 @@ const VIDEOS: VideoItem[] = [
     id: 1,
     title: "Project Demo 1",
     description: "A brief overview of the project's key features",
-    videoUrl: "/videos/demo1.mp4",
-    thumbnail: "/images/thumb1.jpg"
+    videoUrl: getCDNVideoUrl('demo1.mp4'),
+    thumbnail: getCDNImageUrl('thumb1.jpg')
   },
   {
     id: 2,
     title: "Project Demo 2",
     description: "Showcasing the user interface and interactions",
-    videoUrl: "/videos/demo2.mp4",
-    thumbnail: "/images/thumb2.jpg"
+    videoUrl: getCDNVideoUrl('demo2.mp4'),
+    thumbnail: getCDNImageUrl('thumb2.jpg')
   },
 ];
 

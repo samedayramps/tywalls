@@ -1,5 +1,6 @@
 import { component$, useSignal, useVisibleTask$ } from "@builder.io/qwik";
 import { BaseSection } from "./BaseSection";
+import { getOptimizedImageUrl } from "~/constants/cdn";
 
 interface PhotoItem {
   id: number;
@@ -11,31 +12,31 @@ interface PhotoItem {
 const PHOTOS: PhotoItem[] = [
   {
     id: 1,
-    src: "/images/photo1.jpg",
+    src: getOptimizedImageUrl('photo1.jpg', 800, 600),
     alt: "Project 1",
-    gridArea: "1 / 1 / 3 / 3" // Spans 2x2
+    gridArea: "1 / 1 / 3 / 3"
   },
   {
     id: 2,
-    src: "/images/photo2.jpg",
+    src: getOptimizedImageUrl('photo2.jpg', 800, 600),
     alt: "Project 2",
     gridArea: "1 / 3 / 2 / 4"
   },
   {
     id: 3,
-    src: "/images/photo3.jpg",
+    src: getOptimizedImageUrl('photo3.jpg', 800, 600),
     alt: "Project 3",
     gridArea: "2 / 3 / 3 / 4"
   },
   {
     id: 4,
-    src: "/images/photo4.jpg",
+    src: getOptimizedImageUrl('photo4.jpg', 800, 600),
     alt: "Project 4",
     gridArea: "3 / 1 / 4 / 2"
   },
   {
     id: 5,
-    src: "/images/photo5.jpg",
+    src: getOptimizedImageUrl('photo5.jpg', 800, 600),
     alt: "Project 5",
     gridArea: "3 / 2 / 4 / 4"
   }
