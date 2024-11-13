@@ -1,27 +1,23 @@
 import { component$ } from "@builder.io/qwik";
 import { BaseSection } from "./BaseSection";
-import { pushToDataLayer } from "~/constants/gtm";
 
 export const HeroSection = component$(() => {
   return (
-    <BaseSection background="bg-base-300">
-      <div class="hero min-h-[calc(100vh-4rem)]">
-        <div class="hero-content text-center">
-          <div class="max-w-md">
-            <h1 class="text-5xl font-bold mb-8">Hello, I'm [Your Name]</h1>
-            <p class="text-xl mb-8">Full Stack Developer</p>
-            <button 
-              class="btn btn-primary"
-              onClick$={() => {
-                pushToDataLayer({
-                  event: 'buttonClick',
-                  buttonName: 'viewWork',
-                  section: 'hero'
-                });
-              }}
-            >
-              View My Work
-            </button>
+    <BaseSection background="bg-base-300" class="overflow-hidden">
+      <div class="absolute inset-0">
+        <img 
+          src="/ty-walls-coffee.webp"
+          alt="Ty Walls with coffee"
+          width={500}
+          height={889}
+          loading="eager"
+          decoding="async"
+          class="absolute bottom-0 right-0 h-auto max-h-screen w-auto object-contain opacity-90 pointer-events-none"
+        />
+        
+        <div class="relative h-full flex items-start justify-center pt-[25vh]">
+          <div class="text-center">
+            <h1 class="text-5xl font-bold">Hello, I'm Ty Walls</h1>
           </div>
         </div>
       </div>

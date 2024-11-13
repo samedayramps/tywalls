@@ -182,7 +182,7 @@ export default component$(() => {
   });
 
   return (
-    <div class="h-screen w-screen overflow-hidden touch-action-none overscroll-none">
+    <div class="h-screen w-screen overflow-hidden">
       {/* Progress indicator */}
       <div class="fixed top-4 left-1/2 -translate-x-1/2 z-50 md:hidden">
         <div class="bg-base-200/80 backdrop-blur-sm rounded-full px-4 py-2">
@@ -193,14 +193,21 @@ export default component$(() => {
       </div>
 
       <div 
-        class="transition-transform duration-700 ease-in-out will-change-transform"
+        class="transition-transform duration-700 ease-in-out will-change-transform flex flex-col"
         style={{ transform: `translateY(-${currentSection.value * 100}vh)` }}
       >
-        <HeroSection />
-        <AboutSection />
-        <VideoSection />
-        <PhotoSection />
-        {/* Add other sections */}
+        <div class="min-h-screen flex-shrink-0">
+          <HeroSection />
+        </div>
+        <div class="min-h-screen flex-shrink-0">
+          <AboutSection />
+        </div>
+        <div class="min-h-screen flex-shrink-0">
+          <VideoSection />
+        </div>
+        <div class="min-h-screen flex-shrink-0">
+          <PhotoSection />
+        </div>
       </div>
 
       {/* Navigation dots and mobile indicator remain the same */}

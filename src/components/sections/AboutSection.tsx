@@ -4,7 +4,7 @@ import { BaseSection } from "./BaseSection";
 export const AboutSection = component$(() => {
   return (
     <BaseSection background="bg-base-200">
-      <div class="flex flex-col h-full">
+      <div class="h-full w-full flex flex-col justify-center">
         <h2 class="text-4xl font-bold mb-8">About Me</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
           <div class="space-y-4">

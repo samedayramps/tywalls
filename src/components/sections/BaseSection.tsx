@@ -8,11 +8,9 @@ interface BaseSectionProps {
 export const BaseSection = component$<BaseSectionProps>(({ background = "bg-base-300", class: className = "" }) => {
   return (
     <section 
-      class={`min-h-screen w-full flex items-center justify-center ${background} ${className}`}
+      class={`h-screen w-full relative ${background} ${className}`}
     >
-      <div class="container mx-auto px-4 py-8 md:py-16 overflow-y-auto">
-        <Slot />
-      </div>
+      <Slot />
     </section>
   );
 }); 
